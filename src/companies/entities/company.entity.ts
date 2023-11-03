@@ -24,7 +24,7 @@ export class Company extends TimestampedEntity {
 
   @Column()
   @Expose({ groups: [Groups.Detail, Groups.List] })
-  name: string;
+  reason: string;
 
   @Column({ length: '14', unique: true })
   @Expose({ groups: [Groups.Detail, Groups.List] })
