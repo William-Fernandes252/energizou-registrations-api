@@ -5,7 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 export class CreateCompanyDto {
   @IsNotEmpty()
   @IsAlphanumeric()
-  name: string;
+  reason: string;
 
   @IsNotEmpty()
   @IsAlphanumeric()
