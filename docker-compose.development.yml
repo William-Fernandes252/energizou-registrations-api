@@ -1,0 +1,27 @@
+volumes:
+  mysql_data:
+
+services:
+  nest:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env.development
+    command: npm run start:dev
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    expose:
+      - 3306
+    env_file:
+      - .env.development
