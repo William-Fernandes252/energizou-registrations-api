@@ -7,6 +7,12 @@ import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { AdressesService } from 'src/adresses/adresses.service';
 import { RegisterCompanyDto } from './dto/register-company.dto';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
+import { PageOptionsDto } from 'src/common/dto/PageOptions.dto';
 
 @Injectable()
 export class CompaniesService {
@@ -40,8 +46,13 @@ export class CompaniesService {
     return await this.companyRepository.save(newCompany);
   }
 
-  async findAll(): Promise<Company[]> {
-    return await this.companyRepository.find();
+  async findAll(
+    options: IPaginationOptions &
+      PageOptionsDto<Pick<Company, 'name' | 'created'>>,
+  ): Promise<Pagination<Company>> {
+    const queryBuilder = this.companyRepository.createQueryBuilder('c');
+    queryBuilder.orderBy('c.' + options.sort, options.order);
+    return await paginate<Company>(queryBuilder, options);
   }
 
   async findOne(id: Company['id']): Promise<Company | null> {

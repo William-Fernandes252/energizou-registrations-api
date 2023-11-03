@@ -14,6 +14,7 @@ import {
   Post,
   SerializeOptions,
   UnprocessableEntityException,
+  Query,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -22,6 +23,7 @@ import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
+import { PageOptionsDto } from 'src/common/dto/PageOptions.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('companies')
@@ -32,8 +34,10 @@ export class CompaniesController {
   @Get()
   @CheckPolicies(ability => ability.can(Action.List, Company))
   @SerializeOptions({ groups: [Groups.List] })
-  async findAll() {
-    return this.companiesService.findAll();
+  async findAll(
+    @Query() pageOptionsDto: PageOptionsDto<Pick<Company, 'name' | 'created'>>,
+  ) {
+    return this.companiesService.findAll(pageOptionsDto);
   }
 
   @Get(':id')
