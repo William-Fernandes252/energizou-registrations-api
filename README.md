@@ -12,7 +12,7 @@ In order to run the project locally, run
 
 ```bash
 # define the compose file
-$ export COMPOSE_FILE=docker-compose.development
+$ export COMPOSE_FILE=docker-compose.development.yml
 
 # build the containers
 $ docker compose up -d --build
@@ -28,15 +28,12 @@ $ docker compose up
 ## Test
 
 ```bash
-# Open a shell inside the container
-$ docker compose exec -it nest bash
-
 # unit tests
-$ npm run test
+$ docker compose exec -it nest npm run test
 
 # e2e tests
-$ npm run test:e2e
+$ docker compose exec -it nest npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+$ docker compose exec -it nest npm run test:cov
 ```
