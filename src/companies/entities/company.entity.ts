@@ -51,7 +51,7 @@ export class Company extends TimestampedEntity {
     onDelete: 'CASCADE',
     cascade: true,
   })
-  @Expose({ groups: [Groups.Detail, Groups.List] })
+  @Expose({ groups: [Groups.Detail] })
   @JoinColumn()
   @Transform(({ value }) => `${value.street}, ${value.number}`)
   adress: Adress;
