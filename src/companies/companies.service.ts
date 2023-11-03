@@ -48,7 +48,7 @@ export class CompaniesService {
 
   async findAll(
     options: IPaginationOptions &
-      PageOptionsDto<Pick<Company, 'name' | 'created'>>,
+      PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
   ): Promise<Pagination<Company>> {
     const queryBuilder = this.companyRepository.createQueryBuilder('c');
     queryBuilder.orderBy('c.' + options.sort, options.order);

@@ -35,7 +35,8 @@ export class CompaniesController {
   @CheckPolicies(ability => ability.can(Action.List, Company))
   @SerializeOptions({ groups: [Groups.List] })
   async findAll(
-    @Query() pageOptionsDto: PageOptionsDto<Pick<Company, 'name' | 'created'>>,
+    @Query()
+    pageOptionsDto: PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
   ) {
     return this.companiesService.findAll(pageOptionsDto);
   }
