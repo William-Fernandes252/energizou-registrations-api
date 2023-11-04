@@ -112,7 +112,7 @@ export class CompaniesService {
       password: registrationData.password,
     });
     return await this.create({
-      name: registrationData.name,
+      reason: registrationData.reason,
       cnpj: registrationData.cnpj,
       representative: user.id,
       phone: registrationData.phone,
