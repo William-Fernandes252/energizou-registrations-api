@@ -55,8 +55,8 @@ export class CompaniesService {
     return await paginate<Company>(queryBuilder, options);
   }
 
-  async findOne(id: Company['id']): Promise<Company | null> {
-    const company = await this.companyRepository.findOneBy({ id });
+  async findOne(cnpj: Company['cnpj']): Promise<Company | null> {
+    const company = await this.companyRepository.findOneBy({ cnpj });
     if (!company) {
       throw new NotFoundException();
     }

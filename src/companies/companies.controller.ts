@@ -24,6 +24,7 @@ import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
 import { PageOptionsDto } from 'src/common/dto/PageOptions.dto';
+import { CnpjValidationPipe } from 'src/common/pipes/cnpj-validation.pipe';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('companies')
@@ -41,11 +42,13 @@ export class CompaniesController {
     return this.companiesService.findAll(pageOptionsDto);
   }
 
-  @Get(':id')
+  @Get(':cnpj')
   @CheckPolicies(ability => ability.can(Action.Retrieve, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
-  async findOne(@Param('id') id: Company['id']): Promise<Company> {
-    const company = this.companiesService.findOne(id);
+  async findOne(
+    @Param('cnpj', CnpjValidationPipe) cnpj: Company['cnpj'],
+  ): Promise<Company> {
+    const company = this.companiesService.findOne(cnpj);
     if (!company) {
       throw new NotFoundException();
     }

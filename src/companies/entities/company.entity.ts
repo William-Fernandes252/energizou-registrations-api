@@ -1,4 +1,4 @@
-import { Expose, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { Adress } from 'src/adresses/entities/adress.entity';
 import { TimestampedEntity } from 'src/common/entities/timestamped.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -19,7 +19,7 @@ export enum Groups {
 @Entity()
 export class Company extends TimestampedEntity {
   @PrimaryGeneratedColumn('uuid')
-  @Expose({ groups: [Groups.Detail, Groups.List] })
+  @Exclude({ toPlainOnly: true })
   id: string;
 
   @Column()
