@@ -33,6 +33,7 @@ export class CompaniesService {
     const adress = await this.adressesService.getOrCreate({
       number: createCompanyDto.number,
       street: createCompanyDto.street,
+      cep: createCompanyDto.cep,
     });
 
     const newCompany = new Company();
@@ -118,6 +119,7 @@ export class CompaniesService {
       phone: registrationData.phone,
       number: registrationData.number,
       street: registrationData.street,
+      cep: registrationData.cep,
     });
   }
 }

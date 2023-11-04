@@ -2,7 +2,7 @@ import { TimestampedEntity } from 'src/common/entities/timestamped.entity';
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
-@Unique(['number', 'street'])
+@Unique(['number', 'street', 'cep'])
 export class Adress extends TimestampedEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -12,4 +12,7 @@ export class Adress extends TimestampedEntity {
 
   @Column()
   street: string;
+
+  @Column()
+  cep: string;
 }

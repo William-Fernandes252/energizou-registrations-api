@@ -1,4 +1,9 @@
-import { IsAlphanumeric, IsNotEmpty, IsPhoneNumber } from 'class-validator';
+import {
+  IsAlphanumeric,
+  IsNotEmpty,
+  IsNumberString,
+  IsPhoneNumber,
+} from 'class-validator';
 import { Adress } from 'src/adresses/entities/adress.entity';
 import { User } from 'src/users/entities/user.entity';
 
@@ -22,4 +27,8 @@ export class CreateCompanyDto {
 
   @IsNotEmpty()
   street: Adress['street'];
+
+  @IsNotEmpty()
+  @IsNumberString()
+  cep: string;
 }
