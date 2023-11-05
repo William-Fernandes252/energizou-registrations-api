@@ -18,7 +18,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Energizou Registrations API')
-    .setDescription('API para gerenciamento dos clientes da Energizou')
+    .setDescription('API para gerenciamento dos clientes da Energizou.')
     .setVersion('1.0')
     .addTag('energizou-registrations')
     .addBearerAuth()
