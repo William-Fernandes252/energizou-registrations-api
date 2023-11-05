@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { hash, verify } from 'argon2';
 import {
   Entity,
   Column,
@@ -36,11 +36,10 @@ export class User extends ParanoidEntity {
   company?: Relation<Company>;
 
   async hashPassword(password: string) {
-    const saltRounds = 10;
-    this.password = await bcrypt.hash(password, saltRounds);
+    this.password = await hash(password);
   }
 
   async checkPassword(password: string): Promise<boolean> {
-    return await bcrypt.compare(password, this.password);
+    return await verify(this.password, password);
   }
 }
