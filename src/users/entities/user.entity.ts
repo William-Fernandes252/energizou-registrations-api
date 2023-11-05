@@ -9,6 +9,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { Company } from 'src/companies/entities/company.entity';
 import { ParanoidEntity } from 'src/common/entities/paranoid.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity()
 export class User extends ParanoidEntity {
@@ -26,6 +27,7 @@ export class User extends ParanoidEntity {
   email: string;
 
   @Column()
+  @ApiHideProperty()
   isAdmin: boolean = false;
 
   @ManyToOne(() => Company, (company: Company) => company.users, {

@@ -18,7 +18,9 @@ import { User } from './entities/user.entity';
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory/casl-ability.factory';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(PoliciesGuard)
 @Controller('users')

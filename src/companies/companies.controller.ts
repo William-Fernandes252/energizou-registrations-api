@@ -25,7 +25,10 @@ import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
 import { PageOptionsDto } from 'src/common/dto/PageOptions.dto';
 import { CnpjValidationPipe } from 'src/common/pipes/cnpj-validation.pipe';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('companies')
+@ApiExtraModels(RegisterCompanyDto, UpdateCompanyDto)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('companies')
 @UseGuards(PoliciesGuard)
@@ -42,6 +45,11 @@ export class CompaniesController {
     return this.companiesService.findAll(pageOptionsDto);
   }
 
+  /**
+   * Busca um cliente pelo CNPJ cadastrado.
+   * @param cnpj
+   * @returns `Company` se encontrado, `null` caso contrário
+   */
   @Get(':cnpj')
   @CheckPolicies(ability => ability.can(Action.Retrieve, Company))
   @SerializeOptions({ groups: [Groups.Detail] })

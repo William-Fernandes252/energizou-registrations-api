@@ -5,6 +5,15 @@
   "compilerOptions": {
     "builder": "tsc",
     "deleteOutDir": true,
-    "typeCheck": true
+    "typeCheck": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "classValidatorShim": true,
+          "introspectComments": true
+        }
+      }
+    ]
   }
 }
