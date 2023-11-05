@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -24,10 +25,7 @@ export class UsersService {
       errors.forEach(console.error);
       return null;
     }
-
-    const user = new User();
-    Object.assign(user, createUserDto);
-    await user.hashPassword(createUserDto.password);
+    const user = plainToClass(User, createUserDto);
     return await this.userRepository.save(user);
   }
 

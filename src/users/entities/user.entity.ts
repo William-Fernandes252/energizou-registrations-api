@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   Relation,
+  BeforeInsert,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Company } from 'src/companies/entities/company.entity';
@@ -35,8 +36,9 @@ export class User extends ParanoidEntity {
   })
   company?: Relation<Company>;
 
-  async hashPassword(password: string) {
-    this.password = await hash(password);
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await hash(this.password);
   }
 
   async checkPassword(password: string): Promise<boolean> {
