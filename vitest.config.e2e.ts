@@ -1,4 +1,3 @@
-import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -17,5 +16,5 @@ export default defineConfig({
       '@test': './test',
     },
   },
-  plugins: [swc.vite()],
+  plugins: [],
 });
