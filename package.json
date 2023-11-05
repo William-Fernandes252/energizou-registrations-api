@@ -21,7 +21,9 @@
     "test:watch": "NODE_ENV=test vitest",
     "test:cov": "NODE_ENV=test vitest run --coverage",
     "test:debug": "NODE_ENV=test vitest --inspect-brk --inspect --logHeapUsage --threads=false",
-    "test:e2e": "NODE_ENV=test vitest run --config ./vitest.config.e2e.ts"
+    "test:e2e": "NODE_ENV=test vitest run --config ./vitest.config.e2e.ts",
+    "repl:dev": "npm run start:dev -- --entryFile repl",
+    "repl": "npm run start -- --entryFile repl"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",

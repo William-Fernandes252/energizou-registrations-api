@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,18 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  /**
+   * Util method to create a new user. Built to be used both in controllers and in REPL
+   * @param createUserDto
+   * @returns User if payload is valid, else `null`
+   */
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const errors = await validate(createUserDto);
+    if (errors.length > 0) {
+      errors.forEach(console.error);
+      return null;
+    }
+
     const user = new User();
     Object.assign(user, createUserDto);
     await user.hashPassword(createUserDto.password);
