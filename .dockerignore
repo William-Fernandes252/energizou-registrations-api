@@ -1,3 +1,4 @@
 ./screenshots
 README.md
 .editorconfig
+node_modules
