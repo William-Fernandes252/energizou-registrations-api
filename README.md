@@ -2,6 +2,8 @@
 
 A platform for customers managment built with NestJS and React. It was developed during a technical test of a [Energizou](https://www.linkedin.com/company/energizou/) selection process.
 
+![API Overview](./screenshots/main.png)
+
 ## Requirements
 
 - Docker and Docker Compose (instalation guide [here](https://docs.docker.com/compose/install/))
