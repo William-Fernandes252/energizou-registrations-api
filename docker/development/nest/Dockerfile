@@ -1,12 +1,18 @@
 ## Development build
 
 ARG nodeVersion=19.3.0-alpine
-ARG buildEnv=development
 
 FROM node:${nodeVersion} AS development
 
+ARG buildEnv=development
+
 # Set environment variables
-ENV NODE_ENV=${buildEnv}
+ENV NODE_ENV ${buildEnv}
+
+# Get start script
+COPY --chown=node:node ./docker/${NODE_ENV}/nest/start.sh /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -29,6 +35,13 @@ USER node
 # Production build
 
 FROM node:${nodeVersion} AS build
+
+ARG buildEnv=production
+
+# Get start script
+COPY --chown=node:node ./docker/${NODE_ENV}/nest/start.sh /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
 
 WORKDIR /usr/src/app
 

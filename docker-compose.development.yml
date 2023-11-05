@@ -4,14 +4,14 @@ volumes:
 services:
   nest:
     build:
-      dockerfile: Dockerfile
+      dockerfile: ./docker/development/nest/Dockerfile
       context: .
       target: development
     volumes:
       - .:/usr/src/app
     env_file:
       - .env.development
-    command: npm run start:dev
+    command: /start
     ports:
       - 8000:8000
     depends_on:
