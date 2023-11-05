@@ -97,7 +97,7 @@ export class CompaniesController {
   @Post('register')
   @CheckPolicies(ability => ability.can(Action.Create, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
-  async register(registrationDto: RegisterCompanyDto) {
+  async register(@Body() registrationDto: RegisterCompanyDto) {
     return this.companiesService.register(registrationDto);
   }
 }
