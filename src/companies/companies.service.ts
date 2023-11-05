@@ -52,7 +52,9 @@ export class CompaniesService {
       PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
   ): Promise<Pagination<Company>> {
     const queryBuilder = this.companyRepository.createQueryBuilder('c');
-    queryBuilder.orderBy('c.' + options.sort, options.order);
+    if (options.sort) {
+      queryBuilder.orderBy('c.' + options.sort, options.order);
+    }
     return await paginate<Company>(queryBuilder, options);
   }
 
