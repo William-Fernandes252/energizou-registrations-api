@@ -8,6 +8,7 @@ import { CompaniesModule } from './companies/companies.module';
 import { AdressesModule } from './adresses/adresses.module';
 import { AppController } from './app.controller';
 import { CaslModule } from './casl/casl.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CaslModule } from './casl/casl.module';
     CompaniesModule,
     AdressesModule,
     CaslModule,
+    AuthModule,
   ],
   controllers: [AppController],
 })
