@@ -14,8 +14,11 @@ COPY --chown=node:node ./docker/${NODE_ENV}/nest/start.sh /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
+# Use the node user from the image (instead of the root user)
+USER node
+
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /home/node/app
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
@@ -27,9 +30,6 @@ RUN npm ci
 
 # Bundle app source
 COPY --chown=node:node . .
-
-# Use the node user from the image (instead of the root user)
-USER node
 
 
 # Production build
