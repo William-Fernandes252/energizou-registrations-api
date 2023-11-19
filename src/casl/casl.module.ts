@@ -4,6 +4,6 @@ import { PoliciesGuard } from './policies.guard';
 
 @Module({
   providers: [CaslAbilityFactory, PoliciesGuard],
-  exports: [CaslAbilityFactory],
+  exports: [CaslAbilityFactory, PoliciesGuard],
 })
 export class CaslModule {}
