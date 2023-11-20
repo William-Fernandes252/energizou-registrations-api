@@ -10,26 +10,20 @@ ARG buildEnv=development
 ENV NODE_ENV ${buildEnv}
 
 # Get start script
-COPY --chown=node:node ./docker/${NODE_ENV}/nest/start.sh /start
+COPY ./docker/${NODE_ENV}/nest/start.sh /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-# Use the node user from the image (instead of the root user)
-USER node
-
 # Create app directory
-WORKDIR /home/node/app
+WORKDIR /usr/src/app
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
 # Copying this first prevents re-running npm install on every code change.
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
-
-# Bundle app source
-COPY --chown=node:node . .
 
 
 # Production build
@@ -59,7 +53,7 @@ COPY --chown=node:node . .
 RUN npm run build
 
 # Set NODE_ENV environment variable
-ENV NODE_ENV production
+ENV NODE_ENV ${buildEnv}
 
 # Running `npm ci` removes the existing node_modules directory.
 # Passing in --only=production ensures that only the production dependencies are installed.
