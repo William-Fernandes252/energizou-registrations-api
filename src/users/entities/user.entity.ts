@@ -29,7 +29,7 @@ export class User extends ParanoidEntity {
 
   @Column()
   @ApiHideProperty()
-  isAdmin: boolean = false;
+  isAdmin: boolean;
 
   @ManyToOne(() => Company, (company: Company) => company.users, {
     nullable: true,
