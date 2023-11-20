@@ -1,8 +1,8 @@
 ## Development build
 
-ARG nodeVersion=19.3.0-alpine
+ARG nodeVersion=19.3.0
 
-FROM node:${nodeVersion} AS development
+FROM node:${nodeVersion}-bullseye AS development
 
 ARG buildEnv=development
 
@@ -28,7 +28,7 @@ RUN npm ci
 
 # Production build
 
-FROM node:${nodeVersion} AS build
+FROM node:${nodeVersion}-bullseye AS build
 
 ARG buildEnv=production
 
@@ -65,7 +65,7 @@ USER node
 
 # Production container
 
-FROM node:${nodeVersion} AS production
+FROM node:${nodeVersion}-bullseye AS production
 
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
