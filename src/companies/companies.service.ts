@@ -12,7 +12,7 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
-import { PageOptionsDto } from 'src/common/dto/PageOptions.dto';
+import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
 
 @Injectable()
 export class CompaniesService {

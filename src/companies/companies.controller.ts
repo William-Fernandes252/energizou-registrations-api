@@ -23,9 +23,9 @@ import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
-import { PageOptionsDto } from 'src/common/dto/PageOptions.dto';
+import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
 import { CnpjValidationPipe } from 'src/common/pipes/cnpj-validation.pipe';
-import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags, ApiParam } from '@nestjs/swagger';
 
 @ApiTags('companies')
 @ApiExtraModels(RegisterCompanyDto, UpdateCompanyDto)
@@ -35,6 +35,10 @@ import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
+  /**
+   * Seleciona uma página de clientes.
+   * @param pageOptionsDto
+   */
   @Get()
   @CheckPolicies(ability => ability.can(Action.List, Company))
   @SerializeOptions({ groups: [Groups.List] })
@@ -50,6 +54,7 @@ export class CompaniesController {
    * @param cnpj
    * @returns `Company` se encontrado, `null` caso contrário
    */
+  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ cadastrado' })
   @Get(':cnpj')
   @CheckPolicies(ability => ability.can(Action.Retrieve, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
@@ -63,6 +68,12 @@ export class CompaniesController {
     return company;
   }
 
+  /**
+   * Atualiza as informações de um cliente pelo ID.
+   * @param id
+   * @param updateCompanyDto
+   */
+  @ApiParam({ name: 'id', type: String, description: 'ID do cliente' })
   @Patch(':id')
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
@@ -84,6 +95,10 @@ export class CompaniesController {
     return company;
   }
 
+  /**
+   * Remove um cliente pelo ID.
+   */
+  @ApiParam({ name: 'id', type: String, description: 'ID do cliente' })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @CheckPolicies(ability => ability.can(Action.Delete, Company))
@@ -94,6 +109,10 @@ export class CompaniesController {
     }
   }
 
+  /**
+   * Registra um novo cliente.
+   * @param registrationDto
+   */
   @Post('register')
   @CheckPolicies(ability => ability.can(Action.Create, Company))
   @SerializeOptions({ groups: [Groups.Detail] })

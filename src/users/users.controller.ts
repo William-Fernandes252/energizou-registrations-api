@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
+  Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,7 +19,9 @@ import { User } from './entities/user.entity';
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory/casl-ability.factory';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { AllowAny } from 'src/auth/allow-any.decorator';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @ApiTags('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -27,12 +30,26 @@ import { ApiTags } from '@nestjs/swagger';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Post('register')
+  @AllowAny()
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return await this.usersService.create(createUserDto);
+  }
+
+  /**
+   * Retorna uma lista com todos os usuários registrados.
+   */
   @Get()
+  @AllowAny()
   @CheckPolicies(ability => ability.can(Action.List, User))
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
+  /**
+   * Busca um usuário pelo seu ID.
+   */
+  @ApiParam({ name: 'id', type: String, description: 'ID do usuário' })
   @Get(':id')
   @CheckPolicies(ability => ability.can(Action.Retrieve, User))
   findOne(@Param('id') id: User['id']): Promise<User> {
@@ -43,7 +60,12 @@ export class UsersController {
     return user;
   }
 
+  /**
+   * Atualiza um usuário existente pelo seu ID.
+   */
+  @ApiParam({ name: 'id', type: String, description: 'ID do usuário' })
   @Patch(':id')
+  @AllowAny()
   @CheckPolicies(ability => ability.can(Action.Update, User))
   async update(
     @Param('id') id: User['id'],
@@ -56,6 +78,10 @@ export class UsersController {
     return updatedUser;
   }
 
+  /**
+   * Deleta um usuário existente pelo seu ID.
+   */
+  @ApiParam({ name: 'id', type: String, description: 'ID do usuário' })
   @Delete(':id')
   @CheckPolicies(ability => ability.can(Action.Delete, User))
   @HttpCode(HttpStatus.NO_CONTENT)
