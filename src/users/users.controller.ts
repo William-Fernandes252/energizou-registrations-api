@@ -49,7 +49,7 @@ export class UsersController {
     @Param('id') id: User['id'],
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const updatedUser = this.usersService.update(id, updateUserDto);
+    const updatedUser = await this.usersService.update(id, updateUserDto);
     if (!updatedUser) {
       throw new NotFoundException();
     }
