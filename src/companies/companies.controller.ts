@@ -25,9 +25,16 @@ import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
 import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
 import { CnpjValidationPipe } from 'src/common/pipes/cnpj-validation.pipe';
-import { ApiExtraModels, ApiTags, ApiParam } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiTags,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
+import { DEFAULT_SECURITY_SCHEME } from 'src/config/auth.config';
 
 @ApiTags('companies')
+@ApiBearerAuth(DEFAULT_SECURITY_SCHEME.apiName)
 @ApiExtraModels(RegisterCompanyDto, UpdateCompanyDto)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('companies')

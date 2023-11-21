@@ -19,11 +19,13 @@ import { User } from './entities/user.entity';
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory/casl-ability.factory';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AllowAny } from 'src/auth/allow-any.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
+import { DEFAULT_SECURITY_SCHEME } from 'src/config/auth.config';
 
 @ApiTags('users')
+@ApiBearerAuth(DEFAULT_SECURITY_SCHEME.apiName)
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(PoliciesGuard)
 @Controller('users')

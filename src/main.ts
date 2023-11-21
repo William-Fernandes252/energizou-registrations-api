@@ -5,7 +5,9 @@ import {
 } from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DEFAULT_SECURITY_SCHEME } from './config/auth.config';
 import { AppModule } from './app.module';
+import type { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,7 +23,10 @@ async function bootstrap() {
     .setDescription('API para gerenciamento dos clientes da Energizou.')
     .setVersion('1.0')
     .addTag('energizou-registrations')
-    .addBearerAuth()
+    .addBearerAuth(
+      DEFAULT_SECURITY_SCHEME as SecuritySchemeObject,
+      DEFAULT_SECURITY_SCHEME.apiName,
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
