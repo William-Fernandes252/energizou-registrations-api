@@ -1,8 +1,10 @@
 import {
   AbilityBuilder,
   AbilityClass,
+  ConditionsMatcher,
   ExtractSubjectType,
   InferSubjects,
+  MatchConditions,
   PureAbility,
 } from '@casl/ability';
 import { Adress } from 'src/adresses/entities/adress.entity';
@@ -30,19 +32,29 @@ export class CaslAbilityFactory {
       PureAbility as AbilityClass<AppAbility>,
     );
 
+    const lambdaMatcher: ConditionsMatcher<MatchConditions> = matchConditions =>
+      matchConditions;
+
     if (user.isAdmin) {
       can(Action.Manage, 'all');
     }
 
-    can([Action.Retrieve, Action.Update, Action.Delete], Company, {
-      representative: user,
-    });
-    can(Action.Retrieve, Company, { id: user.company.id });
-    can([Action.Update, Action.Retrieve, Action.Delete], User, { id: user.id });
+    can(
+      [Action.Retrieve, Action.Update, Action.Delete],
+      Company,
+      ({ representative }) => representative.id === user.id,
+    );
+    can(Action.Retrieve, Company, ({ id }) => id === user.company?.id);
+    can(
+      [Action.Update, Action.Retrieve, Action.Delete],
+      User,
+      ({ id }) => id === user.id,
+    );
 
     return build({
       detectSubjectType: item =>
         item.constructor as ExtractSubjectType<Subjects>,
+      conditionsMatcher: lambdaMatcher,
     });
   }
 }
