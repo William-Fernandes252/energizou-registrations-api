@@ -10,32 +10,36 @@ A platform for customers managment built with NestJS and React. It was developed
 
 ## Instalation
 
-In order to run the project locally, run
+In order to install the project locally, run
 
 ```bash
 # define the compose file
-$ export COMPOSE_FILE=docker-compose.development.yml
+export COMPOSE_FILE=docker-compose.development.yml
 
 # build the containers
-$ docker compose up -d --build
+docker compose build
 ```
 
 ## Running the app
 
+To run the API in a development environment, execute
+
 ```bash
 # development
-$ docker compose up
+docker compose up
 ```
+
+now, the resources are available on the [localhost](http://localhost:8000) (see the documentation http://localhost:8000/docs).
 
 ## Test
 
 ```bash
 # unit tests
-$ docker compose exec -it nest npm run test
+docker compose exec -it nest npm run test
 
 # e2e tests
-$ docker compose exec -it nest npm run test:e2e
+docker compose exec -it nest npm run test:e2e
 
 # test coverage
-$ docker compose exec -it nest npm run test:cov
+docker compose exec -it nest npm run test:cov
 ```
