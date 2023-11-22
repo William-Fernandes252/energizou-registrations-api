@@ -1,4 +1,4 @@
-import { IsAlpha, IsNotEmpty, IsNumberString, Length } from 'class-validator';
+import { IsNotEmpty, IsNumberString, Length, Matches } from 'class-validator';
 import { Address } from '../entities/address.entity';
 
 export class CreateAddressDto {
@@ -13,7 +13,9 @@ export class CreateAddressDto {
    * Nome da rua.
    */
   @IsNotEmpty()
-  @IsAlpha()
+  @Matches(/^[\wçÇ][\w\sçÇ]*[\wçÇ]$/, {
+    message: 'street must contain only letters and spaces',
+  })
   street: Address['street'];
 
   /**
