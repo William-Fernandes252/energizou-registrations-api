@@ -33,7 +33,7 @@ export class AuthController {
       },
     },
   })
-  async login(@Request() req): Promise<{ acess_token: string }> {
+  async login(@Request() req): Promise<{ access_token: string }> {
     return this.authService.login(req.user);
   }
 }

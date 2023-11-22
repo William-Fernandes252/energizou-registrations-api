@@ -29,7 +29,7 @@ export class AuthService {
   async login(user: User) {
     const payload = instanceToPlain(user);
     return {
-      acess_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload),
     };
   }
 }
