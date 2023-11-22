@@ -1,4 +1,11 @@
-import { Controller, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { ApiBody, ApiSecurity, ApiTags } from '@nestjs/swagger';
@@ -13,6 +20,7 @@ export class AuthController {
   @AllowAny()
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @ApiBody({
     schema: {
       type: 'object',
