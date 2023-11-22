@@ -7,7 +7,7 @@ import {
   MatchConditions,
   PureAbility,
 } from '@casl/ability';
-import { Adress } from 'src/adresses/entities/adress.entity';
+import { Address } from 'src/addresses/entities/address.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { User } from 'src/users/entities/user.entity';
 
@@ -21,7 +21,7 @@ export enum Action {
 }
 
 type Subjects =
-  | InferSubjects<typeof User | typeof Company | typeof Adress>
+  | InferSubjects<typeof User | typeof Company | typeof Address>
   | 'all';
 
 export type AppAbility = PureAbility<[Action, Subjects]>;

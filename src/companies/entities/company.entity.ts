@@ -1,5 +1,5 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { Adress } from 'src/adresses/entities/adress.entity';
+import { Address } from 'src/addresses/entities/address.entity';
 import { TimestampedEntity } from 'src/common/entities/timestamped.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -47,12 +47,12 @@ export class Company extends TimestampedEntity {
   @Expose({ groups: [Groups.Detail] })
   users: User[];
 
-  @OneToOne(() => Adress, {
+  @OneToOne(() => Address, {
     onDelete: 'CASCADE',
     cascade: true,
   })
   @Expose({ groups: [Groups.Detail] })
   @JoinColumn()
   @Transform(({ value }) => `${value.street}, ${value.number}`)
-  adress: Adress;
+  address: Address;
 }

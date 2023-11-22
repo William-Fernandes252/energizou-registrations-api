@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['number', 'street', 'cep'])
-export class Adress extends TimestampedEntity {
+export class Address extends TimestampedEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -7,27 +7,27 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AdressesService } from './adresses.service';
-import { Adress } from './entities/adress.entity';
+import { AddressesService } from './addresses.service';
+import { Address } from './entities/address.entity';
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory/casl-ability.factory';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('adresses')
+@ApiTags('addresses')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(PoliciesGuard)
-@Controller('adresses')
-export class AdressesController {
-  constructor(private readonly adressesService: AdressesService) {}
+@Controller('addresses')
+export class AddressesController {
+  constructor(private readonly addressesService: AddressesService) {}
 
   /**
    * Retorna todos os endereços cadastrados.
    */
   @Get()
-  @CheckPolicies(ability => ability.can(Action.List, Adress))
-  async findAll(): Promise<Adress[]> {
-    return await this.adressesService.findAll();
+  @CheckPolicies(ability => ability.can(Action.List, Address))
+  async findAll(): Promise<Address[]> {
+    return await this.addressesService.findAll();
   }
 
   /**
@@ -35,12 +35,12 @@ export class AdressesController {
    */
   @ApiParam({ name: 'id', type: String, description: 'ID do endereço' })
   @Get(':id')
-  @CheckPolicies(ability => ability.can(Action.Retrieve, Adress))
-  async findOne(@Param('id') id: Adress['id']) {
-    const adress = await this.adressesService.findOne(id);
-    if (!adress) {
+  @CheckPolicies(ability => ability.can(Action.Retrieve, Address))
+  async findOne(@Param('id') id: Address['id']) {
+    const address = await this.addressesService.findOne(id);
+    if (!address) {
       throw new NotFoundException();
     }
-    return adress;
+    return address;
   }
 }

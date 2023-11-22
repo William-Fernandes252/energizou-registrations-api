@@ -5,7 +5,7 @@ import authConfig from './config/auth.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { CompaniesModule } from './companies/companies.module';
-import { AdressesModule } from './adresses/adresses.module';
+import { AddressesModule } from './addresses/addresses.module';
 import { AppController } from './app.controller';
 import { CaslModule } from './casl/casl.module';
 import { AuthModule } from './auth/auth.module';
@@ -29,7 +29,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     CompaniesModule,
-    AdressesModule,
+    AddressesModule,
     CaslModule,
     AuthModule,
   ],

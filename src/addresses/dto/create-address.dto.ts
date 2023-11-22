@@ -1,26 +1,26 @@
 import { IsAlpha, IsNotEmpty, IsNumberString, Length } from 'class-validator';
-import { Adress } from '../entities/adress.entity';
+import { Address } from '../entities/address.entity';
 
-export class CreateAdressDto {
+export class CreateAddressDto {
   /**
    * Número.
    */
   @IsNotEmpty()
   @IsNumberString()
-  number: Adress['number'];
+  number: Address['number'];
 
   /**
    * Nome da rua.
    */
   @IsNotEmpty()
   @IsAlpha()
-  street: Adress['street'];
+  street: Address['street'];
 
   /**
-   * CEP (apenas os digitos).
+   * CEP (apenas os dígitos).
    */
   @IsNotEmpty()
   @IsNumberString()
   @Length(8, 8)
-  cep: Adress['cep'];
+  cep: Address['cep'];
 }

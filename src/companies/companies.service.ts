@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
-import { AdressesService } from 'src/adresses/adresses.service';
+import { AddressesService } from 'src/addresses/addresses.service';
 import { RegisterCompanyDto } from './dto/register-company.dto';
 import {
   IPaginationOptions,
@@ -20,7 +20,7 @@ export class CompaniesService {
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
     private readonly usersService: UsersService,
-    private readonly adressesService: AdressesService,
+    private readonly addressesService: AddressesService,
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
@@ -30,7 +30,7 @@ export class CompaniesService {
     if (!user) {
       return Promise.reject('User not found');
     }
-    const adress = await this.adressesService.getOrCreate({
+    const address = await this.addressesService.getOrCreate({
       number: createCompanyDto.number,
       street: createCompanyDto.street,
       cep: createCompanyDto.cep,
@@ -41,7 +41,7 @@ export class CompaniesService {
       ...createCompanyDto,
       representative: user,
       users: [user],
-      address: adress,
+      address: address,
     });
 
     return await this.companyRepository.save(newCompany);
@@ -88,13 +88,13 @@ export class CompaniesService {
       existingCompany.representative = user;
     }
     if (updateCompanyDto.number || updateCompanyDto.street) {
-      existingCompany.adress.number =
-        updateCompanyDto.number || existingCompany.adress.number;
-      existingCompany.adress.street =
-        updateCompanyDto.street || existingCompany.adress.street;
-      await this.adressesService.update(existingCompany.adress.id, {
-        number: existingCompany.adress.number,
-        street: existingCompany.adress.street,
+      existingCompany.address.number =
+        updateCompanyDto.number || existingCompany.address.number;
+      existingCompany.address.street =
+        updateCompanyDto.street || existingCompany.address.street;
+      await this.addressesService.update(existingCompany.address.id, {
+        number: existingCompany.address.number,
+        street: existingCompany.address.street,
       });
     }
     return await this.companyRepository.save(existingCompany);

@@ -5,10 +5,10 @@ import {
   IsPhoneNumber,
   Length,
 } from 'class-validator';
-import { CreateAdressDto } from 'src/adresses/dto/create-adress.dto';
+import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
 import { User } from 'src/users/entities/user.entity';
 
-export class CreateCompanyDto extends CreateAdressDto {
+export class CreateCompanyDto extends CreateAddressDto {
   /**
    * Razão social do cliente.
    */
