@@ -109,10 +109,11 @@ export class CompaniesService {
   }
 
   async register(registrationData: RegisterCompanyDto): Promise<Company> {
-    const user = await this.usersService.create({
+    const user = await this.usersService.getOrCreate({
       name: registrationData.name,
       email: registrationData.email,
       password: registrationData.password,
+      isAdmin: false,
     });
     return await this.create({
       reason: registrationData.reason,

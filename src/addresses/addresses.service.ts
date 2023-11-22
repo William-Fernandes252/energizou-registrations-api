@@ -53,13 +53,10 @@ export class AddressesService {
   }
 
   async getOrCreate(createAddressDto: CreateAddressDto): Promise<Address> {
-    try {
-      return await this.findOneBy(createAddressDto);
-    } catch (error) {
-      if (error.message === 'Address not found') {
-        return await this.create(createAddressDto);
-      }
-      throw error;
+    const address = await this.findOneBy(createAddressDto);
+    if (address) {
+      return address;
     }
+    return await this.create(createAddressDto);
   }
 }

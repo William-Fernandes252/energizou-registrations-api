@@ -41,6 +41,14 @@ export class UsersService {
     return await this.userRepository.findOneBy({ email });
   }
 
+  async getOrCreate(createUserDto: CreateUserDto): Promise<User> {
+    const user = await this.findOneByEmail(createUserDto.email);
+    if (user) {
+      return user;
+    }
+    return await this.create(createUserDto);
+  }
+
   async update(
     id: User['id'],
     updateUserDto: UpdateUserDto,

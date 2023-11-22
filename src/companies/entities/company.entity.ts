@@ -40,7 +40,9 @@ export class Company extends TimestampedEntity {
   })
   @JoinColumn()
   @Expose({ groups: [Groups.Detail, Groups.List] })
-  @Transform(({ value }) => value.email)
+  @Transform(({ value }) => value.email, {
+    toPlainOnly: true,
+  })
   representative: User;
 
   @OneToMany(() => User, (user: User) => user.company)
@@ -53,6 +55,8 @@ export class Company extends TimestampedEntity {
   })
   @Expose({ groups: [Groups.Detail] })
   @JoinColumn()
-  @Transform(({ value }) => `${value.street}, ${value.number}`)
+  @Transform(({ value }) => `${value.street}, ${value.number}`, {
+    toPlainOnly: true,
+  })
   address: Address;
 }
