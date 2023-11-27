@@ -53,7 +53,7 @@ export class CompaniesController {
     @Query()
     pageOptionsDto: PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
   ) {
-    return this.companiesService.findAll(pageOptionsDto);
+    return await this.companiesService.findAll(pageOptionsDto);
   }
 
   /**
@@ -68,7 +68,7 @@ export class CompaniesController {
   async findOne(
     @Param('cnpj', CnpjValidationPipe) cnpj: Company['cnpj'],
   ): Promise<Company> {
-    const company = this.companiesService.findOne(cnpj);
+    const company = await this.companiesService.findOne(cnpj);
     if (!company) {
       throw new NotFoundException();
     }
@@ -110,7 +110,7 @@ export class CompaniesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @CheckPolicies(ability => ability.can(Action.Delete, Company))
   async remove(@Param('id') id: Company['id']): Promise<void> {
-    const company = this.companiesService.remove(id);
+    const company = await this.companiesService.remove(id);
     if (!company) {
       throw new NotFoundException();
     }
@@ -124,6 +124,6 @@ export class CompaniesController {
   @CheckPolicies(ability => ability.can(Action.Create, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async register(@Body() registrationDto: RegisterCompanyDto) {
-    return this.companiesService.register(registrationDto);
+    return await this.companiesService.register(registrationDto);
   }
 }

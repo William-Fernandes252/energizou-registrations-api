@@ -45,7 +45,7 @@ export class UsersController {
   @AllowAny()
   @CheckPolicies(ability => ability.can(Action.List, User))
   async findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+    return await this.usersService.findAll();
   }
 
   /**
@@ -54,8 +54,8 @@ export class UsersController {
   @ApiParam({ name: 'id', type: String, description: 'ID do usuário' })
   @Get(':id')
   @CheckPolicies(ability => ability.can(Action.Retrieve, User))
-  findOne(@Param('id') id: User['id']): Promise<User> {
-    const user = this.usersService.findOne(id);
+  async findOne(@Param('id') id: User['id']): Promise<User> {
+    const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException();
     }
