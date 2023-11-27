@@ -36,7 +36,7 @@ export class Company extends TimestampedEntity {
 
   @OneToOne(() => User, (user: User) => user.company, {
     onDelete: 'CASCADE',
-    cascade: true,
+    eager: true,
   })
   @JoinColumn()
   @Expose({ groups: [Groups.Detail, Groups.List] })
@@ -51,7 +51,7 @@ export class Company extends TimestampedEntity {
 
   @OneToOne(() => Address, {
     onDelete: 'CASCADE',
-    cascade: true,
+    eager: true,
   })
   @Expose({ groups: [Groups.Detail] })
   @JoinColumn()

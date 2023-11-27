@@ -51,7 +51,10 @@ export class CompaniesService {
     options: IPaginationOptions &
       PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
   ): Promise<Pagination<Company>> {
-    const queryBuilder = this.companyRepository.createQueryBuilder('c');
+    const queryBuilder = this.companyRepository
+      .createQueryBuilder('c')
+      .leftJoinAndSelect('c.address', 'address')
+      .leftJoinAndSelect('c.representative', 'representative');
     if (options.sort) {
       queryBuilder.orderBy('c.' + options.sort, options.order);
     }
