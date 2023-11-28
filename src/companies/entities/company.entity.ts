@@ -45,7 +45,9 @@ export class Company extends TimestampedEntity {
   })
   representative: User;
 
-  @OneToMany(() => User, (user: User) => user.company)
+  @OneToMany(() => User, (user: User) => user.company, {
+    eager: true,
+  })
   @Expose({ groups: [Groups.Detail] })
   users: User[];
 
