@@ -1,5 +1,4 @@
 import {
-  IsAlphanumeric,
   IsNotEmpty,
   IsNumberString,
   IsPhoneNumber,
@@ -14,7 +13,6 @@ export class CreateCompanyDto extends CreateAddressDto {
    * Razão social do cliente.
    */
   @IsNotEmpty({ message: 'O nome da empresa deve ser informado.' })
-  @IsAlphanumeric()
   reason: string;
 
   /**
