@@ -3,9 +3,10 @@ import {
   IsNotEmpty,
   IsNumberString,
   IsPhoneNumber,
-  Length,
+  Validate,
 } from 'class-validator';
 import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
+import { CNPJConstraint } from 'src/common/validators/constraints';
 import { User } from 'src/users/entities/user.entity';
 
 export class CreateCompanyDto extends CreateAddressDto {
@@ -24,7 +25,7 @@ export class CreateCompanyDto extends CreateAddressDto {
     { no_symbols: true },
     { message: 'O CNPJ deve conter apenas dígitos.' },
   )
-  @Length(14, 14, { message: 'CNPJ inválido.' })
+  @Validate(CNPJConstraint)
   cnpj: string;
 
   /**
