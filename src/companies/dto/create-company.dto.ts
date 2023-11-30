@@ -3,12 +3,14 @@ import {
   IsNumberString,
   IsPhoneNumber,
   Validate,
+  ValidateNested,
 } from 'class-validator';
 import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
-import { CNPJConstraint } from 'src/common/validators/constraints';
+import { CNPJConstraint } from '../validators/constraints';
 import { User } from 'src/users/entities/user.entity';
+import AddressAlreadyExistsConstraint from 'src/addresses/validators/constraints';
 
-export class CreateCompanyDto extends CreateAddressDto {
+export class CreateCompanyDto {
   /**
    * Razão social do cliente.
    */
@@ -36,10 +38,16 @@ export class CreateCompanyDto extends CreateAddressDto {
   phone: string;
 
   /**
-   * Representante da empresa (ID de um usúrio registrado e ativo).
+   * Representante da empresa (ID de um usuário registrado e ativo).
    */
   @IsNotEmpty({
     message: 'O ID do representante da empresa deve ser informado.',
   })
   representative: User['id'];
+
+  @Validate(AddressAlreadyExistsConstraint, {
+    message: 'Já existe um cliente registrado com este endereço.',
+  })
+  @ValidateNested()
+  address: CreateAddressDto;
 }

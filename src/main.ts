@@ -3,11 +3,13 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { DEFAULT_SECURITY_SCHEME } from './config/auth.config';
 import { AppModule } from './app.module';
 import type { SecuritySchemeObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+import { useContainer } from 'class-validator';
+import formatValidationErrors from './common/errors/format';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -29,7 +31,6 @@ async function bootstrap() {
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-
   SwaggerModule.setup('docs', app, document);
 
   app.useGlobalPipes(
@@ -37,8 +38,22 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
       transformOptions: { enableImplicitConversion: true },
+      disableErrorMessages: false,
+      exceptionFactory: errors => {
+        const message = formatValidationErrors(errors);
+        console.log(message);
+
+        return new BadRequestException({
+          message,
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+      },
     }),
   );
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   await app.listen('8000', '0.0.0.0');
 }
 bootstrap();

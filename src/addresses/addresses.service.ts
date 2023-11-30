@@ -26,8 +26,9 @@ export class AddressesService {
   async findOneBy({
     number,
     street,
+    cep,
   }: Partial<CreateAddressDto>): Promise<Address | null> {
-    return await this.addressRepository.findOneBy({ number, street });
+    return await this.addressRepository.findOneBy({ number, street, cep });
   }
 
   async update(

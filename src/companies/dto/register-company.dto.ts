@@ -1,10 +1,15 @@
-import { IntersectionType, OmitType } from '@nestjs/swagger';
-import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
+import { OmitType } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { CreateCompanyDto } from './create-company.dto';
+import { ValidateNested } from 'class-validator';
 
-export class RegisterCompanyDto extends IntersectionType(
-  OmitType(CreateCompanyDto, ['representative'] as const),
-  OmitType(CreateUserDto, ['isAdmin'] as const),
-  CreateAddressDto,
-) {}
+class CreateRepresentativeDto extends OmitType(CreateUserDto, [
+  'isAdmin',
+] as const) {}
+
+export class RegisterCompanyDto extends OmitType(CreateCompanyDto, [
+  'representative',
+] as const) {
+  @ValidateNested()
+  representative: CreateRepresentativeDto;
+}

@@ -30,11 +30,10 @@ export class CompaniesService {
     if (!user) {
       return Promise.reject('User not found');
     }
-    const address = await this.addressesService.getOrCreate({
-      number: createCompanyDto.number,
-      street: createCompanyDto.street,
-      cep: createCompanyDto.cep,
-    });
+
+    const address = await this.addressesService.create(
+      createCompanyDto.address,
+    );
 
     const newCompany = new Company();
     Object.assign(newCompany, {
@@ -90,11 +89,8 @@ export class CompaniesService {
       );
       existingCompany.representative = user;
     }
-    if (updateCompanyDto.number || updateCompanyDto.street) {
-      existingCompany.address.number =
-        updateCompanyDto.number || existingCompany.address.number;
-      existingCompany.address.street =
-        updateCompanyDto.street || existingCompany.address.street;
+
+    if (updateCompanyDto.address) {
       await this.addressesService.update(existingCompany.address.id, {
         number: existingCompany.address.number,
         street: existingCompany.address.street,
@@ -113,9 +109,7 @@ export class CompaniesService {
 
   async register(registrationData: RegisterCompanyDto): Promise<Company> {
     const user = await this.usersService.getOrCreate({
-      name: registrationData.name,
-      email: registrationData.email,
-      password: registrationData.password,
+      ...registrationData.representative,
       isAdmin: false,
     });
     return await this.create({
@@ -123,9 +117,7 @@ export class CompaniesService {
       cnpj: registrationData.cnpj,
       representative: user.id,
       phone: registrationData.phone,
-      number: registrationData.number,
-      street: registrationData.street,
-      cep: registrationData.cep,
+      address: registrationData.address,
     });
   }
 }
