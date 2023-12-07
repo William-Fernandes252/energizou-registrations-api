@@ -13,6 +13,7 @@ import {
   paginate,
 } from 'nestjs-typeorm-paginate';
 import { PageOptionsDto } from 'src/common/dto/page-options.dto';
+import { AddUserDto } from './dto/add-user.dto';
 
 @Injectable()
 export class CompaniesService {
@@ -110,5 +111,14 @@ export class CompaniesService {
       phone: registrationData.phone,
       address: registrationData.address,
     });
+  }
+
+  async addUser(company: Company, addUserDto: AddUserDto): Promise<Company> {
+    const user = await this.usersService.create({
+      ...addUserDto,
+      isAdmin: false,
+    });
+    company.users = [...company.users, user];
+    return await this.companyRepository.save(company);
   }
 }

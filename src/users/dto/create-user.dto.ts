@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsStrongPassword } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsStrongPassword,
+  Validate,
+} from 'class-validator';
+import { UserWithEmailAlreadyExistsConstraint } from '../validators/constraints';
 
 export class CreateUserDto {
   /**
@@ -6,6 +12,7 @@ export class CreateUserDto {
    */
   @IsEmail(undefined, { message: 'Email inválido.' })
   @IsNotEmpty({ message: 'O email deve ser informado.' })
+  @Validate(UserWithEmailAlreadyExistsConstraint)
   email: string;
 
   /**

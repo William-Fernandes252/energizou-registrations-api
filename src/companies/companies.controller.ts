@@ -32,6 +32,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { DEFAULT_SECURITY_SCHEME } from 'src/config/auth.config';
+import { AddUserDto } from './dto/add-user.dto';
 import { CompanyByIdPipe } from './pipes/company-by-id.pipe';
 
 @ApiTags('companies')
@@ -114,5 +115,16 @@ export class CompaniesController {
   @SerializeOptions({ groups: [Groups.Detail] })
   async register(@Body() registrationDto: RegisterCompanyDto) {
     return await this.companiesService.register(registrationDto);
+  }
+
+  @ApiParam({ name: 'id', type: String, description: 'ID do cliente' })
+  @Post(':id/add-user')
+  @CheckPolicies(ability => ability.can(Action.Update, Company))
+  @SerializeOptions({ groups: [Groups.Detail] })
+  async addUser(
+    @Param('id', ParseUUIDPipe, CompanyByIdPipe) company: Company,
+    @Body() addUserDto: AddUserDto,
+  ) {
+    return await this.companiesService.addUser(company, addUserDto);
   }
 }
