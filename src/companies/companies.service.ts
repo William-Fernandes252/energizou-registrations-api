@@ -69,14 +69,9 @@ export class CompaniesService {
   }
 
   async update(
-    id: Company['id'],
+    company: Company,
     updateCompanyDto: UpdateCompanyDto,
   ): Promise<Company> {
-    const existingCompany = await this.companyRepository.findOneBy({ id });
-    if (!existingCompany) {
-      return null;
-    }
-
     if (updateCompanyDto.representative) {
       const user = await this.usersService.findOne(
         updateCompanyDto.representative,
@@ -84,26 +79,22 @@ export class CompaniesService {
       if (!user) {
         return Promise.reject('User not found');
       }
-      existingCompany.users = existingCompany.users.filter(
+      company.users = company.users.filter(
         user => user.id !== updateCompanyDto.representative,
       );
-      existingCompany.representative = user;
+      company.representative = user;
     }
 
     if (updateCompanyDto.address) {
-      await this.addressesService.update(existingCompany.address.id, {
-        number: existingCompany.address.number,
-        street: existingCompany.address.street,
+      await this.addressesService.update(company.address.id, {
+        number: company.address.number,
+        street: company.address.street,
       });
     }
-    return await this.companyRepository.save(existingCompany);
+    return await this.companyRepository.save(company);
   }
 
-  async remove(id: Company['id']): Promise<Company> {
-    const company = await this.companyRepository.findOneBy({ id });
-    if (!company) {
-      return null;
-    }
+  async remove(company: Company): Promise<Company> {
     return await this.companyRepository.remove(company);
   }
 

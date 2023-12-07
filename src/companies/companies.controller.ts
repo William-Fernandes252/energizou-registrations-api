@@ -13,8 +13,8 @@ import {
   UseGuards,
   Post,
   SerializeOptions,
-  UnprocessableEntityException,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -32,6 +32,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { DEFAULT_SECURITY_SCHEME } from 'src/config/auth.config';
+import { CompanyByIdPipe } from './pipes/company-by-id.pipe';
 
 @ApiTags('companies')
 @ApiBearerAuth(DEFAULT_SECURITY_SCHEME.apiName)
@@ -85,21 +86,10 @@ export class CompaniesController {
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async update(
-    @Param('id') id: Company['id'],
+    @Param('id', ParseUUIDPipe, CompanyByIdPipe) company: Company,
     @Body() updateCompanyDto: UpdateCompanyDto,
   ): Promise<Company> {
-    let company: Company;
-    try {
-      company = await this.companiesService.update(id, updateCompanyDto);
-    } catch (error) {
-      throw new UnprocessableEntityException(error.message);
-    }
-
-    if (!company) {
-      throw new NotFoundException();
-    }
-
-    return company;
+    return this.companiesService.update(company, updateCompanyDto);
   }
 
   /**
@@ -109,11 +99,10 @@ export class CompaniesController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @CheckPolicies(ability => ability.can(Action.Delete, Company))
-  async remove(@Param('id') id: Company['id']): Promise<void> {
-    const company = await this.companiesService.remove(id);
-    if (!company) {
-      throw new NotFoundException();
-    }
+  async remove(
+    @Param('id', ParseUUIDPipe, CompanyByIdPipe) company: Company,
+  ): Promise<void> {
+    await this.companiesService.remove(company);
   }
 
   /**
