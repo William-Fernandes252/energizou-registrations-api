@@ -68,7 +68,7 @@ export class CompaniesController {
   async findOne(
     @Param('cnpj', CnpjValidationPipe) cnpj: Company['cnpj'],
   ): Promise<Company> {
-    const company = await this.companiesService.findOne(cnpj);
+    const company = await this.companiesService.findOneByCNPJ(cnpj);
     if (!company) {
       throw new NotFoundException();
     }

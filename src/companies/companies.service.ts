@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -60,12 +60,12 @@ export class CompaniesService {
     return await paginate<Company>(queryBuilder, options);
   }
 
-  async findOne(cnpj: Company['cnpj']): Promise<Company | null> {
-    const company = await this.companyRepository.findOneBy({ cnpj });
-    if (!company) {
-      throw new NotFoundException();
-    }
-    return company;
+  async findOneByCNPJ(cnpj: Company['cnpj']): Promise<Company | null> {
+    return await this.companyRepository.findOneBy({ cnpj });
+  }
+
+  async findOne(id: Company['id']): Promise<Company | null> {
+    return await this.companyRepository.findOneBy({ id });
   }
 
   async update(
