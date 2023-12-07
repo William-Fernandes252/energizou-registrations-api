@@ -21,3 +21,19 @@ export class UserWithEmailAlreadyExistsConstraint {
   }
 }
 
+@Injectable()
+@ValidatorConstraint({
+  name: 'UserExistsConstraint',
+  async: true,
+})
+export class UserExistsConstraint {
+  constructor(private readonly usersService: UsersService) {}
+
+  async validate(id: User['id']) {
+    return (await this.usersService.findOne(id)) !== null;
+  }
+
+  defaultMessage() {
+    return `O usuário informado não existe.`;
+  }
+}

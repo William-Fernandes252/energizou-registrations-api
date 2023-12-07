@@ -8,7 +8,7 @@ import { CreateAddressDto } from '../dto/create-address.dto';
 
 @Injectable()
 @ValidatorConstraint({ name: 'AddressAlreadyExistsConstraint', async: true })
-export default class AddressAlreadyExistsConstraint
+export class AddressAlreadyExistsConstraint
   implements ValidatorConstraintInterface
 {
   constructor(private readonly addressesService: AddressesService) {}

@@ -8,7 +8,8 @@ import {
 import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
 import { CNPJConstraint } from '../validators/constraints';
 import { User } from 'src/users/entities/user.entity';
-import AddressAlreadyExistsConstraint from 'src/addresses/validators/constraints';
+import { AddressAlreadyExistsConstraint } from 'src/addresses/validators/constraints';
+import { UserExistsConstraint } from 'src/users/validators/constraints';
 
 export class CreateCompanyDto {
   /**
@@ -43,6 +44,7 @@ export class CreateCompanyDto {
   @IsNotEmpty({
     message: 'O ID do representante da empresa deve ser informado.',
   })
+  @Validate(UserExistsConstraint)
   representative: User['id'];
 
   @Validate(AddressAlreadyExistsConstraint, {

@@ -28,9 +28,6 @@ export class CompaniesService {
     const user = await this.usersService.findOne(
       createCompanyDto.representative,
     );
-    if (!user) {
-      return Promise.reject('User not found');
-    }
 
     const address = await this.addressesService.create(
       createCompanyDto.address,
