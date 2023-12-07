@@ -23,7 +23,7 @@ import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
-import { PageOptionsDto } from 'src/common/dto/pageOptions.dto';
+import { PageOptionsDto } from 'src/common/dto/page-options.dto';
 import { CnpjValidationPipe } from 'src/companies/pipes/cnpj-validation.pipe';
 import {
   ApiExtraModels,
