@@ -15,10 +15,6 @@ export default class AddressAlreadyExistsConstraint
 
   async validate(value: CreateAddressDto) {
     const { number, street, cep } = value;
-    console.log(number, street, cep);
-
-    console.log(await this.addressesService.findOneBy({ number, street, cep }));
-
     return (
       (await this.addressesService.findOneBy({ number, street, cep })) === null
     );

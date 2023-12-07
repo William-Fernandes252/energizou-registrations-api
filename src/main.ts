@@ -41,8 +41,6 @@ async function bootstrap() {
       disableErrorMessages: false,
       exceptionFactory: errors => {
         const message = formatValidationErrors(errors);
-        console.log(message);
-
         return new BadRequestException({
           message,
           error: 'Bad Request',
