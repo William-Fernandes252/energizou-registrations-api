@@ -2,6 +2,9 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
 import { Order } from 'src/common/enums';
 
+const MAX_LIMIT = 100;
+const DEFAULT_LIMIT = 20;
+
 export class PageOptionsDto<T extends Record<string, unknown>> {
   /*
    * Ordem dos registros (`ASC` ou `DESC`).
@@ -28,8 +31,8 @@ export class PageOptionsDto<T extends Record<string, unknown>> {
 
   @ApiPropertyOptional({
     minimum: 1,
-    default: 1,
-    maximum: 100,
+    default: DEFAULT_LIMIT,
+    maximum: MAX_LIMIT,
     description: 'Quantidade de registros por página',
   })
   @IsInt()
