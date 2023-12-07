@@ -7,7 +7,7 @@ import { AddressesService } from '../addresses.service';
 import { CreateAddressDto } from '../dto/create-address.dto';
 
 @Injectable()
-@ValidatorConstraint({ name: 'AdressAlreadyExistsConstraint', async: true })
+@ValidatorConstraint({ name: 'AddressAlreadyExistsConstraint', async: true })
 export default class AddressAlreadyExistsConstraint
   implements ValidatorConstraintInterface
 {
