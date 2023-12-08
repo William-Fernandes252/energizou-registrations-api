@@ -33,6 +33,7 @@ export class User extends ParanoidEntity {
 
   @ManyToOne(() => Company, (company: Company) => company.users, {
     nullable: true,
+    onDelete: 'CASCADE',
   })
   company?: Relation<Company>;
 
