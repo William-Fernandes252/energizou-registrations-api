@@ -6,6 +6,7 @@ import { AddressesModule } from 'src/addresses/addresses.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { CaslModule } from 'src/casl/casl.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CaslModule } from 'src/casl/casl.module';
     AddressesModule,
     CaslModule,
     TypeOrmModule.forFeature([Company]),
+    ConfigModule,
   ],
   controllers: [CompaniesController],
   providers: [CompaniesService],

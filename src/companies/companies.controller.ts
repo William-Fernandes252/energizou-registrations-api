@@ -30,10 +30,16 @@ import {
   ApiTags,
   ApiParam,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { DEFAULT_SECURITY_SCHEME } from 'src/config/auth.config';
 import { AddUserDto } from './dto/add-user.dto';
 import { CompanyByIdPipe } from './pipes/company-by-id.pipe';
+import {
+  type Sorting,
+  SortingParams,
+} from 'src/common/decorators/sorting-params.decorator';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('companies')
 @ApiBearerAuth(DEFAULT_SECURITY_SCHEME.apiName)
@@ -42,20 +48,44 @@ import { CompanyByIdPipe } from './pipes/company-by-id.pipe';
 @Controller('companies')
 @UseGuards(PoliciesGuard)
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(
+    private readonly companiesService: CompaniesService,
+    private readonly configService: ConfigService,
+  ) {}
 
   /**
    * Seleciona uma página de clientes.
-   * @param pageOptionsDto
+   * @param pagination
    */
   @Get()
   @CheckPolicies(ability => ability.can(Action.List, Company))
   @SerializeOptions({ groups: [Groups.List] })
+  @ApiQuery({
+    name: 'search',
+    type: String,
+    required: false,
+    description: 'Busca por razão social, CNPJ ou nome do representante.',
+  })
+  @ApiQuery({
+    name: 'sort',
+    type: String,
+    required: false,
+    description: 'Ordenação. Ex: "reason:ASC".',
+  })
   async findAll(
     @Query()
-    pageOptionsDto: PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
+    pagination: PageOptionsDto,
+    @SortingParams(['reason', 'created']) sorting: Sorting,
+    @Query('search') search?: string,
   ) {
-    return await this.companiesService.findAll(pageOptionsDto);
+    return await this.companiesService.findAll(
+      {
+        ...pagination,
+        route: `${this.configService.get<string>('BASE_URL')}/companies`,
+      },
+      sorting,
+      search,
+    );
   }
 
   /**
@@ -63,7 +93,7 @@ export class CompaniesController {
    * @param cnpj
    * @returns `Company` se encontrado, `null` caso contrário
    */
-  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ cadastrado' })
+  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ cadastrado.' })
   @Get(':cnpj')
   @CheckPolicies(ability => ability.can(Action.Retrieve, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
@@ -82,7 +112,7 @@ export class CompaniesController {
    * @param id
    * @param updateCompanyDto
    */
-  @ApiParam({ name: 'id', type: String, description: 'ID do cliente' })
+  @ApiParam({ name: 'id', type: String, description: 'ID do cliente.' })
   @Patch(':id')
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
@@ -96,7 +126,7 @@ export class CompaniesController {
   /**
    * Remove um cliente pelo ID.
    */
-  @ApiParam({ name: 'id', type: String, description: 'ID do cliente' })
+  @ApiParam({ name: 'id', type: String, description: 'ID do cliente.' })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @CheckPolicies(ability => ability.can(Action.Delete, Company))
@@ -117,7 +147,7 @@ export class CompaniesController {
     return await this.companiesService.register(registrationDto);
   }
 
-  @ApiParam({ name: 'id', type: String, description: 'ID do cliente' })
+  @ApiParam({ name: 'id', type: String, description: 'ID do cliente.' })
   @Post(':id/add-user')
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })

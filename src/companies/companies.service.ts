@@ -14,6 +14,7 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { PageOptionsDto } from 'src/common/dto/page-options.dto';
 import { AddUserDto } from './dto/add-user.dto';
+import type { Sorting } from 'src/common/decorators/sorting-params.decorator';
 
 @Injectable()
 export class CompaniesService {
@@ -45,17 +46,27 @@ export class CompaniesService {
   }
 
   async findAll(
-    options: IPaginationOptions &
-      PageOptionsDto<Pick<Company, 'reason' | 'created'>>,
+    pagination: IPaginationOptions & PageOptionsDto,
+    sorting?: Sorting,
+    search?: string,
   ): Promise<Pagination<Company>> {
     const queryBuilder = this.companyRepository
       .createQueryBuilder('c')
-      .leftJoinAndSelect('c.address', 'address')
-      .leftJoinAndSelect('c.representative', 'representative');
-    if (options.sort) {
-      queryBuilder.orderBy('c.' + options.sort, options.order);
+      .leftJoinAndSelect('c.address', 'a')
+      .leftJoinAndSelect('c.representative', 'r');
+
+    if (search) {
+      queryBuilder
+        .where('c.reason LIKE :search', { search: `%${search}%` })
+        .orWhere('c.cnpj LIKE :search', { search: `%${search}%` })
+        .orWhere('r.name LIKE :search', { search: `%${search}%` });
     }
-    return await paginate<Company>(queryBuilder, options);
+
+    if (sorting && sorting.property) {
+      queryBuilder.orderBy('c.' + sorting.property, sorting.direction);
+    }
+
+    return await paginate<Company>(queryBuilder, pagination);
   }
 
   async findOneByCNPJ(cnpj: Company['cnpj']): Promise<Company | null> {
