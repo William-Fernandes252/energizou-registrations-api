@@ -57,8 +57,5 @@ export class Company extends TimestampedEntity {
   })
   @Expose({ groups: [Groups.Detail] })
   @JoinColumn()
-  @Transform(({ value }) => `${value.street}, ${value.number}`, {
-    toPlainOnly: true,
-  })
   address: Address;
 }
