@@ -15,6 +15,7 @@ import {
 import { PageOptionsDto } from 'src/common/dto/page-options.dto';
 import { AddUserDto } from './dto/add-user.dto';
 import type { Sorting } from 'src/common/decorators/sorting-params.decorator';
+import type { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class CompaniesService {
@@ -128,5 +129,29 @@ export class CompaniesService {
     });
     company.users = [...company.users, user];
     return await this.companyRepository.save(company);
+  }
+
+  async removeUser(company: Company, user: User): Promise<Company> {
+    const reason = this.canRemoveUser(company, user);
+    if (reason) {
+      return Promise.reject(reason);
+    }
+
+    company.users = company.users.filter(u => u.id !== user.id);
+
+    return await this.companyRepository.save(company);
+  }
+
+  private canRemoveUser(company: Company, user: User): string | null {
+    if (company.representative.id === user.id) {
+      return 'Não é possível remover o representante da empresa.';
+    } else if (company.users.length === 1) {
+      return 'Não é possível remover o único usuário da empresa.';
+    } else if (company.users.length === 0) {
+      return 'Não há usuários para serem removidos.';
+    } else if (!company.users.find(user => user.id === user.id)) {
+      return 'O usuário informado não pertence a esta empresa.';
+    }
+    return null;
   }
 }

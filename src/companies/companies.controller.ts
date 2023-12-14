@@ -15,6 +15,7 @@ import {
   SerializeOptions,
   Query,
   ParseUUIDPipe,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -24,7 +25,7 @@ import { CheckPolicies } from 'src/casl/check-policies.decorator';
 import { Action } from 'src/casl/casl-ability.factory';
 import { RegisterCompanyDto } from './dto/register-company.dto';
 import { PageOptionsDto } from 'src/common/dto/page-options.dto';
-import { CnpjValidationPipe } from 'src/companies/pipes/cnpj-validation.pipe';
+import { CNPJValidationPipe } from 'src/companies/pipes/cnpj-validation.pipe';
 import {
   ApiExtraModels,
   ApiTags,
@@ -40,6 +41,8 @@ import {
   SortingParams,
 } from 'src/common/decorators/sorting-params.decorator';
 import { ConfigService } from '@nestjs/config';
+import { UserByIdPipe } from 'src/users/pipes/user-by-id.pipe';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('companies')
 @ApiBearerAuth(DEFAULT_SECURITY_SCHEME.apiName)
@@ -98,7 +101,7 @@ export class CompaniesController {
   @CheckPolicies(ability => ability.can(Action.Retrieve, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async findOne(
-    @Param('cnpj', CnpjValidationPipe) cnpj: Company['cnpj'],
+    @Param('cnpj', CNPJValidationPipe) cnpj: Company['cnpj'],
   ): Promise<Company> {
     const company = await this.companiesService.findOneByCNPJ(cnpj);
     if (!company) {
@@ -117,7 +120,7 @@ export class CompaniesController {
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async update(
-    @Param('cnpj', CnpjValidationPipe, CompanyByCnpjPipe) company: Company,
+    @Param('cnpj', CNPJValidationPipe, CompanyByCnpjPipe) company: Company,
     @Body() updateCompanyDto: UpdateCompanyDto,
   ): Promise<Company> {
     return this.companiesService.update(company, updateCompanyDto);
@@ -131,7 +134,7 @@ export class CompaniesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @CheckPolicies(ability => ability.can(Action.Delete, Company))
   async remove(
-    @Param('cnpj', CnpjValidationPipe, CompanyByCnpjPipe) company: Company,
+    @Param('cnpj', CNPJValidationPipe, CompanyByCnpjPipe) company: Company,
   ): Promise<void> {
     await this.companiesService.remove(company);
   }
@@ -152,9 +155,25 @@ export class CompaniesController {
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async addUser(
-    @Param('cnpj', CnpjValidationPipe, CompanyByCnpjPipe) company: Company,
+    @Param('cnpj', CNPJValidationPipe, CompanyByCnpjPipe) company: Company,
     @Body() addUserDto: AddUserDto,
   ) {
     return await this.companiesService.addUser(company, addUserDto);
+  }
+
+  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ do cliente.' })
+  @ApiParam({ name: 'userId', type: String, description: 'ID do usuário.' })
+  @Delete(':cnpj/users/:userId')
+  @CheckPolicies(ability => ability.can(Action.Update, Company))
+  @SerializeOptions({ groups: [Groups.Detail] })
+  async removeUser(
+    @Param('cnpj', CNPJValidationPipe, CompanyByCnpjPipe) company: Company,
+    @Param('userId', ParseUUIDPipe, UserByIdPipe) user: User,
+  ) {
+    try {
+      return await this.companiesService.removeUser(company, user);
+    } catch (error) {
+      throw new UnprocessableEntityException(error.message);
+    }
   }
 }
