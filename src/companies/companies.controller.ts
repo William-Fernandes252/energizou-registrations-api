@@ -34,7 +34,7 @@ import {
 } from '@nestjs/swagger';
 import { DEFAULT_SECURITY_SCHEME } from 'src/config/auth.config';
 import { AddUserDto } from './dto/add-user.dto';
-import { CompanyByIdPipe } from './pipes/company-by-id.pipe';
+import { CompanyByCnpjPipe } from './pipes/company-by-cnpj.pipe';
 import {
   type Sorting,
   SortingParams,
@@ -112,12 +112,12 @@ export class CompaniesController {
    * @param id
    * @param updateCompanyDto
    */
-  @ApiParam({ name: 'id', type: String, description: 'ID do cliente.' })
-  @Patch(':id')
+  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ do cliente.' })
+  @Patch(':cnpj')
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async update(
-    @Param('id', ParseUUIDPipe, CompanyByIdPipe) company: Company,
+    @Param('cnpj', CnpjValidationPipe, CompanyByCnpjPipe) company: Company,
     @Body() updateCompanyDto: UpdateCompanyDto,
   ): Promise<Company> {
     return this.companiesService.update(company, updateCompanyDto);
@@ -126,12 +126,12 @@ export class CompaniesController {
   /**
    * Remove um cliente pelo ID.
    */
-  @ApiParam({ name: 'id', type: String, description: 'ID do cliente.' })
-  @Delete(':id')
+  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ do cliente.' })
+  @Delete(':cnpj')
   @HttpCode(HttpStatus.NO_CONTENT)
   @CheckPolicies(ability => ability.can(Action.Delete, Company))
   async remove(
-    @Param('id', ParseUUIDPipe, CompanyByIdPipe) company: Company,
+    @Param('cnpj', CnpjValidationPipe, CompanyByCnpjPipe) company: Company,
   ): Promise<void> {
     await this.companiesService.remove(company);
   }
@@ -147,12 +147,12 @@ export class CompaniesController {
     return await this.companiesService.register(registrationDto);
   }
 
-  @ApiParam({ name: 'id', type: String, description: 'ID do cliente.' })
-  @Post(':id/add-user')
+  @ApiParam({ name: 'cnpj', type: String, description: 'CNPJ do cliente.' })
+  @Post(':cnpj/users')
   @CheckPolicies(ability => ability.can(Action.Update, Company))
   @SerializeOptions({ groups: [Groups.Detail] })
   async addUser(
-    @Param('id', ParseUUIDPipe, CompanyByIdPipe) company: Company,
+    @Param('cnpj', CnpjValidationPipe, CompanyByCnpjPipe) company: Company,
     @Body() addUserDto: AddUserDto,
   ) {
     return await this.companiesService.addUser(company, addUserDto);
