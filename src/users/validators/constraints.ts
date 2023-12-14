@@ -1,4 +1,7 @@
-import { ValidatorConstraint } from 'class-validator';
+import {
+  ValidatorConstraint,
+  type ValidatorConstraintInterface,
+} from 'class-validator';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users.service';
@@ -9,7 +12,9 @@ import { User } from '../entities/user.entity';
   name: 'UserWithEmailAlreadyExistsConstraint',
   async: true,
 })
-export class UserWithEmailAlreadyExistsConstraint {
+export class UserWithEmailAlreadyExistsConstraint
+  implements ValidatorConstraintInterface
+{
   constructor(private readonly usersService: UsersService) {}
 
   async validate(value: CreateUserDto['email']) {
@@ -26,7 +31,7 @@ export class UserWithEmailAlreadyExistsConstraint {
   name: 'UserExistsConstraint',
   async: true,
 })
-export class UserExistsConstraint {
+export class UserExistsConstraint implements ValidatorConstraintInterface {
   constructor(private readonly usersService: UsersService) {}
 
   async validate(id: User['id']) {
