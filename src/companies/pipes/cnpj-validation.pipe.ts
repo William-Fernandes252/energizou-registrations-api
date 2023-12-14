@@ -15,7 +15,7 @@ import { cnpj } from 'cpf-cnpj-validator';
 export class CNPJValidationPipe implements PipeTransform<string> {
   transform(value: string) {
     if (!value || !cnpj.isValid(value)) {
-      throw new BadRequestException('Invalid CNPJ.');
+      throw new BadRequestException('CNPJ inválido.');
     }
     return cnpj.strip(value);
   }
