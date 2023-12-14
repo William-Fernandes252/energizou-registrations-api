@@ -6,7 +6,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreateAddressDto } from 'src/addresses/dto/create-address.dto';
-import { CNPJConstraint } from '../validators/constraints';
+import {
+  CNPJConstraint,
+  CompanyWithCNPJAlreadyExistsConstraint,
+} from '../validators/constraints';
 import { User } from 'src/users/entities/user.entity';
 import { AddressAlreadyExistsConstraint } from 'src/addresses/validators/constraints';
 import { UserExistsConstraint } from 'src/users/validators/constraints';
@@ -27,6 +30,7 @@ export class CreateCompanyDto {
     { message: 'O CNPJ deve conter apenas dígitos.' },
   )
   @Validate(CNPJConstraint)
+  @Validate(CompanyWithCNPJAlreadyExistsConstraint)
   cnpj: string;
 
   /**
@@ -47,6 +51,7 @@ export class CreateCompanyDto {
   @Validate(UserExistsConstraint)
   representative: User['id'];
 
+  @IsNotEmpty({ message: 'O endereço da empresa deve ser informado.' })
   @Validate(AddressAlreadyExistsConstraint, {
     message: 'Já existe um cliente registrado com este endereço.',
   })
