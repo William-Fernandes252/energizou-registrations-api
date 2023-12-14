@@ -1,4 +1,4 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { Address } from 'src/addresses/entities/address.entity';
 import { TimestampedEntity } from 'src/common/entities/timestamped.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -39,9 +39,6 @@ export class Company extends TimestampedEntity {
   })
   @JoinColumn()
   @Expose({ groups: [Groups.Detail, Groups.List] })
-  @Transform(({ value }) => value.email, {
-    toPlainOnly: true,
-  })
   representative: User;
 
   @OneToMany(() => User, (user: User) => user.company, {
