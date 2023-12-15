@@ -4,6 +4,14 @@ A platform for customers managment built with NestJS and React. It was developed
 
 ![API Overview](./screenshots/main.png)
 
+## About
+
+As custom features, I implemented
+
+- JWT authentication with [Passport.js](https://www.passportjs.org/);
+- authorization policies using [Casl](https://casl.js.org/v6/en)
+- interactive documentation with Swagger;
+
 ## Requirements
 
 - Docker and Docker Compose (instalation guide [here](https://docs.docker.com/compose/install/))
