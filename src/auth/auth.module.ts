@@ -29,10 +29,11 @@ import { LocalAuthGuard } from './local-auth.guard';
   ],
   providers: [
     AuthService,
-    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useExisting: JwtAuthGuard },
     LocalStrategy,
     JwtStrategy,
     LocalAuthGuard,
+    JwtAuthGuard,
   ],
   exports: [AuthService],
   controllers: [AuthController],
